@@ -1,0 +1,185 @@
+<html><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Batman's Digital Playground</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background-color: #000;
+    font-family: 'Courier New', monospace;
+    color: #0f0;
+  }
+  #matrix-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  #batman-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+  }
+  #batman-image {
+    width: 300px;
+    height: auto;
+    filter: drop-shadow(0 0 10px #0f0);
+  }
+  .fun-text {
+    position: fixed;
+    font-size: 24px;
+    color: #ff00ff;
+    text-shadow: 0 0 5px #ff00ff;
+    pointer-events: none;
+    z-index: 20;
+  }
+  #batdance {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #0f0;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 30;
+  }
+</style>
+</head>
+<body>
+  <canvas id="matrix-rain"></canvas>
+  <div id="batman-container">
+    <img id="batman-image" src="new_batman_image.png" alt="Matrix-themed Batman with glowing red eyes raising his hand">
+  </div>
+  <div class="fun-text" style="top: 20px; left: 20px;">Gotham's Digital Guardian</div>
+  <div class="fun-text" style="bottom: 20px; right: 20px;">Coding Justice</div>
+  <button id="batdance">Initiate Bat-Dance</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+<script>
+  // Update the image source to use the correct file
+  const batmanImage = document.getElementById('batman-image');
+  batmanImage.src = 'new_batman_image.png';
+
+  // Matrix rain effect
+  const canvas = document.getElementById('matrix-rain');
+  const ctx = canvas.getContext('2d');
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+  const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const nums = '0123456789';
+  const alphabet = katakana + latin + nums;
+
+  const fontSize = 16;
+  const columns = canvas.width / fontSize;
+
+  const rainDrops = [];
+
+  for (let x = 0; x < columns; x++) {
+    rainDrops[x] = 1;
+  }
+
+  const draw = () => {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = '#0f0';
+    ctx.font = fontSize + 'px monospace';
+
+    for (let i = 0; i < rainDrops.length; i++) {
+      const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+      ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+      if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        rainDrops[i] = 0;
+      }
+      rainDrops[i]++;
+    }
+  };
+
+  setInterval(draw, 30);
+
+  // Fun Batman effect
+  function funBatmanEffect() {
+    gsap.to(batmanImage, {
+      duration: 2,
+      rotation: 360,
+      scale: 1.2,
+      yoyo: true,
+      repeat: -1,
+      ease: 'power1.inOut'
+    });
+  }
+
+  funBatmanEffect();
+
+  // Bat-Dance
+  const batdanceButton = document.getElementById('batdance');
+  batdanceButton.addEventListener('click', () => {
+    gsap.to(batmanImage, {
+      duration: 0.5,
+      y: -50,
+      yoyo: true,
+      repeat: 5,
+      ease: 'power1.inOut'
+    });
+    
+    gsap.to(batmanImage, {
+      duration: 0.25,
+      rotation: -15,
+      yoyo: true,
+      repeat: 10,
+      ease: 'power1.inOut'
+    });
+    
+    const funTexts = document.querySelectorAll('.fun-text');
+    funTexts.forEach(text => {
+      gsap.to(text, {
+        duration: 0.5,
+        scale: 1.5,
+        color: '#ff00ff',
+        yoyo: true,
+        repeat: 5,
+        ease: 'power1.inOut'
+      });
+    });
+  });
+
+  // Interactive elements
+  document.addEventListener('mousemove', (e) => {
+    const xAxis = (window.innerWidth / 2 - e.pageX) / 20;
+    const yAxis = (window.innerHeight / 2 - e.pageY) / 20;
+    gsap.to(batmanImage, {
+      duration: 0.3,
+      rotationY: xAxis,
+      rotationX: yAxis,
+      ease: 'power2.out'
+    });
+  });
+
+  // Add some fun text animations
+  const funTexts = document.querySelectorAll('.fun-text');
+  funTexts.forEach(text => {
+    gsap.to(text, {
+      duration: 1.5,
+      opacity: 0.5,
+      yoyo: true,
+      repeat: -1,
+      ease: 'power1.inOut'
+    });
+  });
+</script>
+</body>
+</html>
